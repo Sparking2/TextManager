@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Excel;
+using System.IO;
 using System.Data;
-using System.Data.Odbc;
 
 public class XlsReader : MonoBehaviour
 {
@@ -11,33 +12,41 @@ public class XlsReader : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        readXLS(Application.dataPath + "/Textos.xlsx");
+        readXLS(Application.dataPath + "/Textos.xls");
     }
 
     void readXLS(string filetoread)
     {
-       
-        string con = "Driver={Microsoft Excel Driver (*.xls)}; DriverId=790; Dbq=" + filetoread + ";";
-        string yourQuery = "SELECT * FROM [Dialogos$]";
-        OdbcConnection oCon = new OdbcConnection(con);
-        OdbcCommand oCmd = new OdbcCommand(yourQuery, oCon);
-        DataTable dtYourData = new DataTable("YourData");
-        oCon.Open();
-        OdbcDataReader rData = oCmd.ExecuteReader();
-        dtYourData.Load(rData);
-        rData.Close();
-        oCon.Close();
-        if (dtYourData.Rows.Count > 0)
+        FileStream stream = File.Open(filetoread, FileMode.Open, FileAccess.Read);
+        
+        //Choose one of either 1 or 2
+        //1. Reading from a binary Excel file ('97-2003 format; *.xls)
+        IExcelDataReader excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
+
+        //2. Reading from a OpenXml Excel file (2007 format; *.xlsx)
+        //IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+
+        //Choose one of either 3, 4, or 5
+        //3. DataSet - The result of each spreadsheet will be created in the result.Tables
+        DataSet result = excelReader.AsDataSet();
+
+        //4. DataSet - Create column names from first row
+        //excelReader.IsFirstRowAsColumnNames = true;
+        //DataSet result = excelReader.AsDataSet();
+
+        //5. Data Reader methods
+        /*while (excelReader.Read())
         {
-            for (int i = 0; i < dtYourData.Rows.Count; i++)
-            {
-                //print(dtYourData.Rows[i][0]);
-                /*
-                Debug.Log(dtYourData.Columns[0].ColumnName + " : " + dtYourData.Rows[i][dtYourData.Columns[0].ColumnName].ToString() +
-                    "  |  " + dtYourData.Columns[1].ColumnName + " : " + dtYourData.Rows[i][dtYourData.Columns[1].ColumnName].ToString() +
-                    "  |  " + dtYourData.Columns[2].ColumnName + " : " + dtYourData.Rows[i][dtYourData.Columns[2].ColumnName].ToString());
-                */
-            }
+            //excelReader.GetInt32(0);
+        }*/
+
+        //6. Free resources (IExcelDataReader is IDisposable)
+        excelReader.Close();
+
+        for(int i = 1; i < result.Tables[0].Rows.Count; i++)
+        {
+            print(result.Tables[0].Rows[i][4]);
         }
+        
     }
 }
