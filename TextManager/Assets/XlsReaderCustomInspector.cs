@@ -49,7 +49,7 @@ public class XlsReaderCustomInspector : Editor
         script.idKey = EditorGUILayout.TextField(script.idKey);
         if (GUILayout.Button("Buscar ID"))
         {
-            Debug.Log(script.Search(Application.dataPath + "/Textos.xls"));
+            Debug.Log(script.Search(Application.dataPath + "/Textos.xlsx"));
         }
 
         #endregion
