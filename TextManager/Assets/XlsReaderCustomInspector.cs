@@ -7,14 +7,14 @@ using UnityEngine.UI;
 [CustomEditor(typeof(XlsReader))]
 public class XlsReaderCustomInspector : Editor
 {
-    string[] idioma = new string[]
+    /*string[] idioma = new string[]
     {
         "ID",
         "Español",
         "Ingles",
         "Italiano",
         "Japones"
-    };
+    };*/
 
     string[] contexto = new string[]
     {
@@ -32,8 +32,8 @@ public class XlsReaderCustomInspector : Editor
 
         #region Idioma
         /////////////w/////////////////////////////////////////////////////////////////////
-        EditorGUILayout.LabelField("Idioma");
-        script.idioma = EditorGUILayout.Popup(script.idioma, idioma);
+        /*EditorGUILayout.LabelField("Idioma");
+        script.idioma = EditorGUILayout.Popup(script.idioma, idioma);*/
         ///////////////////////////////////////////////////////////////////////////////
         #endregion
 

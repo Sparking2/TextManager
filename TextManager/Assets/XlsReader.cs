@@ -17,6 +17,7 @@ public class XlsReader : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        idioma = PlayerPrefs.GetInt("Idioma");
         string mensaje = Search(Application.dataPath + "/Textos.xlsx");
         var texto = GetComponent<Text>();
         texto.text = mensaje;
@@ -98,6 +99,7 @@ public class XlsReader : MonoBehaviour
 
     public string Search(string filetoread)  
     {
+        ReloadLanguage();
         ///filetoread = dirección de archivo, idioma = en que idioma lo retornaremos [1 - esp, 2 - ingles , 3 - italiano, 4 - japones], contexto = No. de tabla que buscammos, idKey = el id que buscamos
         string texto = "";   ///Texto que retornaremos       
         FileStream stream = File.Open(filetoread, FileMode.Open, FileAccess.Read); ///abrir y leer el archivo xls
@@ -118,5 +120,10 @@ public class XlsReader : MonoBehaviour
         }
 
         return texto;
+    }
+
+    void ReloadLanguage()
+    {
+        idioma = PlayerPrefs.GetInt("Idioma");
     }
 }
